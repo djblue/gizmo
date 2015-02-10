@@ -109,3 +109,7 @@ button {
 .input:focus {
   border: 1px solid #79589f;
 }
+.img {
+  display: block;
+  width: 100%;
+}

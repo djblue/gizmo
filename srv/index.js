@@ -35,7 +35,6 @@ var nedb = require('nedb'),
     });
 
 app.get('/search', function (req, res) {
-  console.log(req.query);
   meta.find(req.query, function (err, result) {
     if (err) {
       res.status(500).json(err);
@@ -126,7 +125,6 @@ app.get('/meta/:id', function (req, res) {
 
 app.put('/meta/:id', function (req, res) {
   req.body._id = req.params.id;
-  console.log(req.body);
   meta.update({ _id: req.params.id }, req.body, { upsert: true }, function (err, count) {
     if (err) {
       res.status(500).json(err);

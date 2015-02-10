@@ -31,12 +31,37 @@ var ItemView = React.createClass({
   render: function () {
     var items = this.props.meta.map(function (meta) {
       var link = "http://localhost:3000/blobs/" + meta._id;
+      if (meta.mime === 'image/jpeg') {
+        var control = (
+          <img className="img" src={link} />
+        );
+      }
+      if (meta.mime === 'video/mp4' || meta.mime === 'video/x-m4v') {
+        var control = (
+          <div>
+            <video controls preload="none">
+              <source src={link} type="video/mp4" />
+            </video>
+          </div>
+        );
+      }
+      if (meta.mime === 'audio/mpeg') {
+        var control = (
+          <div>
+            <audio controls preload="none">
+              <source src={link} type="audio/mpeg" />
+            </audio>
+          </div>
+        );
+      }
       return (
         <div>
+          <div>mime: {meta.mime}</div>
           <div>filename: {meta.filename}</div>
           <div>uploaded: {moment(meta.uploaded).fromNow()}</div>
           <div>size: {prettyBytes(meta.size)}</div>
           <a href={link}>link</a>
+          {control}
         </div>
       );
     });
