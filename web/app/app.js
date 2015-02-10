@@ -38,7 +38,12 @@ var SearchBar = React.createClass({
 
 var ItemView = React.createClass({
   render: function () {
-    var items = this.props.meta.map(function (meta) {
+    var items = this.props.meta
+      /*.slice(0,100)*/
+      .filter(function (meta) {
+        return meta.filename.match(this.props.filter);
+      }.bind(this)) 
+      .map(function (meta) {
       var link = "http://localhost:3000/blobs/" + meta._id;
       if (meta.mime === 'image/jpeg') {
         var control = (
@@ -76,22 +81,29 @@ var ItemView = React.createClass({
     });
     return (
       <div>
+        displaying {items.length}
         {items}
       </div>
     );
   }
 });
 
-var handleSearch = function (text) {
-  console.log(text)
-};
-
 var Page = React.createClass({
+  getInitialState: function () {
+    return {
+      searchText: ''
+    }
+  },
+  handleSearch: function (text) {
+    this.setState({
+      searchText: text
+    });
+  },
   render: function () {
     return (
       <div>
-        <SearchBar onSearch={handleSearch} />
-        <ItemView meta={this.props.meta} />
+        <SearchBar onSearch={this.handleSearch} />
+        <ItemView filter={this.state.searchText} meta={this.props.meta} />
       </div>
     );
   }
