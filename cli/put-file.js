@@ -64,7 +64,7 @@ exports.run = function (args) {
     }
 
     var bar = new ProgressBar('uploading [:bar] :percent :etas', {
-      complete: '#'.blue,
+      complete: '#'.red,
       incomplete: '-',
       width: 20,
       total: stat.size
