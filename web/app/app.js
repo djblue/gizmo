@@ -15,13 +15,22 @@ var SearchBar = React.createClass({
     });
     this.props.onSearch(e.target.value);
   },
+  handleUpload: function () {
+    console.log('upload')
+  },
   render: function () {
     return (
-      <div className="search">
-        <input value={this.state.searchText}
+      <div className="search-bar">
+        <div className="search-input">
+        <input placeholder="search..."
+               value={this.state.searchText}
                className="input"
                onChange={this.handleSearch}
                type="text"/>
+        </div>
+        <div className="search-bar-right">
+          <button onClick={this.handleUpload} className="btn search-btn">upload</button>
+        </div>
       </div>
     );
   }
@@ -55,7 +64,7 @@ var ItemView = React.createClass({
         );
       }
       return (
-        <div>
+        <div className="search-item">
           <div>mime: {meta.mime}</div>
           <div>filename: {meta.filename}</div>
           <div>uploaded: {moment(meta.uploaded).fromNow()}</div>
@@ -66,7 +75,7 @@ var ItemView = React.createClass({
       );
     });
     return (
-      <div> 
+      <div>
         {items}
       </div>
     );
