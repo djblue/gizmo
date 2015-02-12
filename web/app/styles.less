@@ -29,7 +29,6 @@
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  color: @dark;
   box-sizing: border-box;
   font-size: 12pt;
 }
@@ -103,10 +102,19 @@ button {
   width: 100%;
 }
 
+
+body {
+  margin-top: 42px;
+  color: @dark;
+}
+
 .search-bar {
   background: @red;
   border-bottom: 1px solid @red-dark;
-  position: relative;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  width: 100%;
 }
 
 @search-bar-right-width: 100px;
@@ -125,7 +133,35 @@ button {
   margin-right: @search-bar-right-width;
 }
 
+body {
+  background: #eeeeee;
+}
+
 .search-item {
+  padding-left: 10px;
+  padding-top: 10px;
+  width: 25%;
+  height: 300px;
+  display: inline-block;
+  text-align: center;
+}
+
+.search-item-inner {
+  border-radius: 2px;
+  background: white;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-name {
+  color: white;
+  border-top: 2px solid @red-dark;
+  background: @red;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 10px;
 }
 
@@ -139,4 +175,16 @@ button {
 
 .search-btn:hover {
   background: @red-dark;
+}
+
+.video-player {
+  max-width: 100%;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
 }

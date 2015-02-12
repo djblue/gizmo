@@ -36,30 +36,59 @@ var SearchBar = React.createClass({
   }
 });
 
+var Slider = React.createClass({
+  getInitialState: function () {
+    return {
+      percentage: 50
+    }
+  },
+  slide: function (e) {
+    console.log(e);
+  },
+  render: function () {
+    return (
+      <div className="slider">
+        <div className="slider-control" onDrag={this.slide}
+             style={{width : this.state.percentage + '%'}}>
+              <button className="slider-control-drag">o</button>
+        </div>
+      </div>
+    );
+  }
+});
+
+var Video = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <video className="video-player" controls preload="none">
+          <source src={this.props.src} type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
+});
+
 var ItemView = React.createClass({
   render: function () {
     var items = this.props.meta
       /*.slice(0,100)*/
       .filter(function (meta) {
-        return meta.filename.match(this.props.filter);
+        return meta.filename.toLowerCase().match(this.props.filter);
       }.bind(this)) 
       .map(function (meta) {
       var link = "http://localhost:3000/blobs/" + meta._id;
-      if (meta.mime === 'image/jpeg') {
+      if (meta.mime && meta.mime.match(/^image/)) {
         var control = (
           <img className="img" src={link} />
         );
-      }
-      if (meta.mime === 'video/mp4' || meta.mime === 'video/x-m4v') {
+      } else if (meta.mime === 'video/mp4' || meta.mime === 'video/x-m4v') {
         var control = (
           <div>
-            <video controls preload="none">
-              <source src={link} type="video/mp4" />
-            </video>
+            <Video src={link} />
           </div>
         );
-      }
-      if (meta.mime === 'audio/mpeg') {
+      } else if (meta.mime === 'audio/mpeg') {
         var control = (
           <div>
             <audio controls preload="none">
@@ -67,21 +96,29 @@ var ItemView = React.createClass({
             </audio>
           </div>
         );
+      } else {
+        var control = (
+          <div>
+            <div>mime: {meta.mime}</div>
+            <div>uploaded: {moment(meta.uploaded).fromNow()}</div>
+            <a href={link}>link</a>
+          </div>
+        )
       }
       return (
         <div className="search-item">
-          <div>mime: {meta.mime}</div>
-          <div>filename: {meta.filename}</div>
-          <div>uploaded: {moment(meta.uploaded).fromNow()}</div>
-          <div>size: {prettyBytes(meta.size)}</div>
-          <a href={link}>link</a>
-          {control}
+          <div className="search-item-inner">
+            {control}
+            <div className="search-name">
+              <span className="pull-left">{meta.filename}</span>
+              <span className="pull-right">{prettyBytes(meta.size)}</span>
+            </div>
+          </div>
         </div>
       );
-    });
+    }.bind(this));
     return (
       <div>
-        displaying {items.length}
         {items}
       </div>
     );
