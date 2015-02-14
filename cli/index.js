@@ -49,6 +49,7 @@ if (cmd === undefined) {
   try {
     require('./' + cmd).run(args);
   } catch (e) {
+    log.bug(e);
     log.err('Command not found: ' + cmd);
     process.exit(1);
   }
