@@ -39,8 +39,10 @@ exports.run = function (args) {
       return tabtab.log(['d'], data, '-');
     }
 
-    tabtab.log(cmds, data);
-    //tabtab.log(['list','of','commands'], data);
+    if (data.words < 2) {
+      return tabtab.log(cmds, data);
+    }
+
 
   });
 
