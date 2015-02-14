@@ -1,3 +1,5 @@
+var log = require('../lib/log');
+
 var http = require('http');
 var crypto = require('crypto');
 
