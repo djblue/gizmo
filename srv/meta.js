@@ -5,11 +5,11 @@ var nedb = require('nedb'),
     });
 
 exports.check = function (req, res, next) {
-  meta.find({ _id: req.params.id }, function (err, meta) {
+  meta.findOne({ _id: req.params.id }, function (err, meta) {
     if (err) {
       res.status(500).json(err);
     } else {
-      req.meta = meta[0] || {};
+      req.meta = meta || {};
       next();
     }
   });
@@ -45,7 +45,22 @@ exports.setup = function (app) {
   });
 
   app.get('/search', function (req, res) {
-    meta.find(req.query, function (err, result) {
+    var query = {};
+    Object.keys(req.query).forEach(function (key) {
+      var val = req.query[key];
+      // g - global
+      // i - case insensitive
+      if (val === 'true') {
+        val = true;
+      } else if (val === 'false') {
+        val = false;
+      } else {
+        val = RegExp(val, 'gi');
+      }
+
+      query[key] = val;
+    });
+    meta.find(query, function (err, result) {
       if (err) {
         res.status(500).json(err);
       } else {
@@ -53,5 +68,6 @@ exports.setup = function (app) {
       }
     });
   });
+
 
 };
