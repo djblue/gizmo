@@ -31,18 +31,24 @@ exports.run = function (args) {
     // stderr not showing on completions
     if(err || !data) return;
 
-    if (/^--\w?/.test(data.last)) {
-      return tabtab.log(['debug', 'verbose'], data, '--');
-    }
-
-    if (/^-\w?/.test(data.last)) {
-      return tabtab.log(['d'], data, '-');
-    }
-
     if (data.words < 2) {
+
+      if (/^--\w?/.test(data.last)) {
+        return tabtab.log(['debug', 'verbose'], data, '--');
+      }
+
+      if (/^-\w?/.test(data.last)) {
+        return tabtab.log(['d'], data, '-');
+      }
+
       return tabtab.log(cmds, data);
     }
 
+    // auto complete sub command
+    var cmd = data.line.split(' ')[1];
+    try {
+      require('./' + cmd).completion(tabtab, data);
+    } catch (e) {}
 
   });
 

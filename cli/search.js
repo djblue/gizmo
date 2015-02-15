@@ -11,6 +11,18 @@ var usage = exports.usage = function (bin, cmd) {
   console.log('Usage: ' + bin + ' ' + cmd + ' [OPTIONS] <string>');
 };
 
+exports.completion = function (tabtab, data) {
+  if (/^--\w?/.test(data.last)) {
+    return tabtab.log([
+      'size',
+      'filename',
+      'uploaded',
+      'mime',
+      '_id'
+    ], data, '--');
+  }
+};
+
 exports.description = "Search content on gizmod";
 
 exports.run = function (args) {
