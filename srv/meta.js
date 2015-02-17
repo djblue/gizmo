@@ -4,6 +4,8 @@ var nedb = require('nedb'),
       autoload: true
     });
 
+exports.db = meta;
+
 exports.check = function (req, res, next) {
   meta.findOne({ _id: req.params.id }, function (err, meta) {
     if (err) {

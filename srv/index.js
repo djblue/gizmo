@@ -4,7 +4,9 @@ var app = express();
 var fs = require('fs');
 var path = require('path');
 var morgan = require('morgan');
+var compression = require('compression');
 
+app.use(compression());
 app.use(morgan('dev'));
 
 app.use(function(req, res, next) {
@@ -25,5 +27,7 @@ console.log(logo);
 require('./blobs').setup(app);
 require('./meta').setup(app);
 require('./tags').setup(app);
+require('./archive').setup(app);
+require('./status').setup(app);
 
 app.listen(3000);

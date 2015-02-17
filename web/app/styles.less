@@ -6,6 +6,8 @@
 @red-dark: darken(@red, 10%);
 @green: #74c080;
 
+::-webkit-scrollbar { display: none; }
+
 .rounded (@color) {
   outline: none;
   font-weight: bold;
@@ -98,14 +100,15 @@ button {
 }
 
 .img {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 
 body {
   margin-top: 42px;
-  color: @dark;
+  color: white;
 }
 
 .search-bar {
@@ -177,14 +180,26 @@ body {
   background: @red-dark;
 }
 
-.video-player {
-  max-width: 100%;
-}
-
 .pull-right {
   float: right;
 }
 
 .pull-left {
   float: left;
+}
+
+.side-panel {
+  position: fixed;
+
+  text-align: center;
+
+  //width: 400px;
+  height: 400px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: black;
+  border-top: 1px solid @red-dark;
+  //padding: 10px;
 }

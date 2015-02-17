@@ -1,7 +1,15 @@
 var React = require('react');
-var $ = require('jquery');
 var moment = require('moment');
 var prettyBytes = require('pretty-bytes');
+
+var Router = require('react-router');
+var Route = Router.Route;
+var NotFoundRoute = Router.NotFoundRoute;
+var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
+var RouteHandler = Router.RouteHandler;
+
+var blobStore = require('./blobStore');
 
 var SearchBar = React.createClass({
   getInitialState: function () {
@@ -36,100 +44,94 @@ var SearchBar = React.createClass({
   }
 });
 
-var Slider = React.createClass({
-  getInitialState: function () {
-    return {
-      percentage: 50
-    }
-  },
-  slide: function (e) {
-    console.log(e);
-  },
-  render: function () {
-    return (
-      <div className="slider">
-        <div className="slider-control" onDrag={this.slide}
-             style={{width : this.state.percentage + '%'}}>
-              <button className="slider-control-drag">o</button>
-        </div>
-      </div>
-    );
-  }
-});
-
-var Video = React.createClass({
-  render: function () {
-    return (
-      <div>
-        <video className="video-player" controls preload="none">
-          <source src={this.props.src} type="video/mp4" />
-        </video>
-      </div>
-    );
-  }
-});
 
 var ItemView = React.createClass({
   render: function () {
     var items = this.props.meta
-      /*.slice(0,100)*/
       .filter(function (meta) {
-        return meta.filename.toLowerCase().match(this.props.filter);
+        return (meta.filename || '').toLowerCase().match(this.props.filter);
       }.bind(this)) 
       .map(function (meta) {
       var link = "http://localhost:3000/blobs/" + meta._id;
-      if (meta.mime && meta.mime.match(/^image/)) {
-        var control = (
-          <img className="img" src={link} />
-        );
-      } else if (meta.mime === 'video/mp4' || meta.mime === 'video/x-m4v') {
-        var control = (
-          <div>
-            <Video src={link} />
-          </div>
-        );
-      } else if (meta.mime === 'audio/mpeg') {
-        var control = (
-          <div>
-            <audio controls preload="none">
-              <source src={link} type="audio/mpeg" />
-            </audio>
-          </div>
-        );
-      } else {
-        var control = (
-          <div>
-            <div>mime: {meta.mime}</div>
-            <div>uploaded: {moment(meta.uploaded).fromNow()}</div>
-            <a href={link}>link</a>
-          </div>
-        )
-      }
       return (
+        <Link to="blobs" params={{id: meta._id}} activeStyle={{border: '1px solid green'}}>
         <div className="search-item">
           <div className="search-item-inner">
-            {control}
             <div className="search-name">
-              <span className="pull-left">{meta.filename}</span>
+              <span className="pull-left">{meta.filename.slice(0,20)}</span>
               <span className="pull-right">{prettyBytes(meta.size)}</span>
             </div>
           </div>
         </div>
+        </Link>
       );
     }.bind(this));
     return (
       <div>
-        {items}
+      {items}
       </div>
     );
   }
 });
 
-var Page = React.createClass({
+var Blobs = React.createClass({
   getInitialState: function () {
     return {
-      searchText: ''
+      _id: this.props.params.id
+    };
+  },
+  componentWillReceiveProps: function (nextProps) {
+    blobStore.getBlobById(nextProps.params.id, this.updateBlob);
+  },
+  componentWillMount: function () {
+    blobStore.getBlobById(this.state._id, this.updateBlob);
+  },
+  updateBlob: function (blob) {
+    this.setState(blob);
+  },
+  render: function () {
+    var meta = this.state;
+    var url = 'http://localhost:3000/blobs/' + this.state._id;
+    if (meta.mime !== undefined) {
+      if (meta.mime.match(/^image\//)) {
+        var control = (
+          <img className="img" src={url} />
+        );
+      } else if (meta.mime.match(/^video\/mp4/)) {
+        var control = (
+          <video className="img" autoplay controls src={url}>
+          </video>
+        );
+      } else {
+        var control = (
+          <div></div>
+        );
+      }
     }
+    return (
+      <div className="side-panel">
+        <div>id: {this.state._id}</div>
+        <div>id: {this.state.mime}</div>
+        {control}
+      </div>
+    );
+  }
+});
+
+var App = React.createClass({
+  componentWillMount: function () {
+    blobStore.getBlobs(this.updateItems);
+  },
+  updateItems: function (items) {
+    this.setState({
+      items: items
+    });
+  },
+  getInitialState: function () {
+    return {
+      searchText: '',
+      items: []
+    };
   },
   handleSearch: function (text) {
     this.setState({
@@ -140,15 +142,21 @@ var Page = React.createClass({
     return (
       <div>
         <SearchBar onSearch={this.handleSearch} />
-        <ItemView filter={this.state.searchText} meta={this.props.meta} />
+        <ItemView filter={this.state.searchText} meta={this.state.items} />
+        <RouteHandler {...this.props}/>
       </div>
     );
   }
 });
 
-$.getJSON('http://localhost:3000/search', function (meta) {
-  React.render(
-    <Page meta={meta} />,
-    document.getElementById('content')
-  );
+
+var routes = (
+  <Route name="app" path="/" handler={App}>
+    <Route ignoreScrollBehavior={true} name="blobs" path="/blobs/:id" handler={Blobs}/>
+  </Route>
+);
+
+Router.run(routes, function (Handler, state) {
+  var params = state.params;
+  React.render(<Handler params={params}/>, document.body);
 });

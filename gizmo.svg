@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="270.93332mm"
+   height="11.853333mm"
+   viewBox="0 0 959.99995 42"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="gizmo.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="456.33764"
+     inkscape:cy="-280.01412"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     showgrid="false"
+     inkscape:window-width="754"
+     inkscape:window-height="396"
+     inkscape:window-x="1671"
+     inkscape:window-y="188"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:snap-to-guides="false"
+     showguides="false" />
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     style="opacity:1;fill:#cb3837;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     id="rect3759"
+     width="960"
+     height="42"
+     x="0"
+     y="2.4780513e-07" />
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1"
+     transform="translate(-24.872456,-505.18109)" />
+  <path
+     style="opacity:0.2;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.00687289px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 113.64793,5.0561029e-7 113.64793,42"
+     id="path4575"
+     inkscape:connector-curvature="0" />
+  <text
+     sodipodi:linespacing="125%"
+     id="text4592"
+     y="28.695402"
+     x="15.747347"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:29.2295208px;line-height:125%;font-family:'Anonymous Pro';-inkscape-font-specification:'Anonymous Pro';letter-spacing:0px;word-spacing:0px;opacity:0.3;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"
+     transform="scale(1.0263596,0.97431737)"><tspan
+       y="28.695402"
+       x="15.747347"
+       id="tspan4594"
+       sodipodi:role="line">gizmo</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;line-height:125%;font-family:'Anonymous Pro';-inkscape-font-specification:'Anonymous Pro';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="16.162441"
+     y="27.665039"
+     id="text4588"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan4590"
+       x="16.162441"
+       y="27.665039">gizmo</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:29.4248867px;line-height:125%;font-family:'Anonymous Pro';-inkscape-font-specification:'Anonymous Pro';letter-spacing:0px;word-spacing:0px;opacity:0.3;fill:#100000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="133.55215"
+     y="31.193083"
+     id="text4619"
+     sodipodi:linespacing="125%"
+     transform="scale(1.0195452,0.98082952)"><tspan
+       sodipodi:role="line"
+       id="tspan4621"
+       x="133.55215"
+       y="31.193083">%</tspan></text>
+  <text
+     sodipodi:linespacing="125%"
+     id="text4615"
+     y="30.580078"
+     x="136.16245"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;line-height:125%;font-family:'Anonymous Pro';-inkscape-font-specification:'Anonymous Pro';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     xml:space="preserve"><tspan
+       y="30.580078"
+       x="136.16245"
+       id="tspan4617"
+       sodipodi:role="line">%</tspan></text>
+</svg>
