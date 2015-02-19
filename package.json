@@ -18,6 +18,7 @@
     "compression": "^1.4.1",
     "content-addressable-store": "^1.5.1",
     "express": "^4.11.1",
+    "highlight.js": "^8.4.0",
     "mime-types": "^2.0.8",
     "minimist": "^1.1.0",
     "moment": "^2.9.0",

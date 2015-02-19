@@ -168,6 +168,12 @@ body {
   bottom: 0;
   padding: 10px;
 }
+.search-item .meta .table {
+  width: 100%;
+}
+.search-item .meta .table td:last-child {
+  text-align: right;
+}
 .search-item-inner {
   border-radius: 2px;
   background: white;
@@ -210,6 +216,9 @@ body {
   top: 42px;
   width: 100%;
   background: black;
+}
+.side-panel .center {
+  margin: auto;
 }
 .side-menu {
   border: 1px dashed orange;

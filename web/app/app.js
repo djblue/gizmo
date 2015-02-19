@@ -2,6 +2,9 @@ var React = require('react');
 var moment = require('moment');
 var prettyBytes = require('pretty-bytes');
 
+var $ = require('jquery');
+var hljs = require('highlight.js');
+
 var Router = require('react-router');
 var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute;
@@ -10,6 +13,7 @@ var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
 
 var blobStore = require('./blobStore');
+var local = require('./localStore');
 
 var SearchBar = React.createClass({
   getInitialState: function () {
@@ -23,6 +27,8 @@ var SearchBar = React.createClass({
     });
     this.props.onSearch(e.target.value);
   },
+  handleSubmit: function () {
+  },
   handleUpload: function () {
     console.log('upload')
   },
@@ -33,6 +39,7 @@ var SearchBar = React.createClass({
         <input placeholder="search..."
                value={this.state.searchText}
                className="input"
+               onKeyUp={this.handleSubmit}
                onChange={this.handleSearch}
                type="text"/>
         </div>
@@ -48,6 +55,10 @@ var SearchBar = React.createClass({
 var ItemView = React.createClass({
   render: function () {
     var items = this.props.meta
+      .sort(function (a, b) {
+        return moment(b.uploaded).valueOf()-
+               moment(a.uploaded).valueOf(); 
+      })
       .filter(function (meta) {
         return (meta.filename || '').toLowerCase().match(this.props.filter);
       }.bind(this)) 
@@ -60,7 +71,18 @@ var ItemView = React.createClass({
             </div>
           </Link>
           <div className="meta">
-            <span>{meta.filename}</span>
+            <table className="table">
+              <tbody>
+                <tr>
+                  <td>{meta.filename}</td>
+                  <td>{moment(meta.uploaded).fromNow()}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>{prettyBytes(meta.size)}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       );
@@ -69,6 +91,51 @@ var ItemView = React.createClass({
       <div>
       {items}
       </div>
+    );
+  }
+});
+
+var Video = React.createClass({
+  getInitialState: function () {
+    return {
+      time: local.get(this.props.src) || 0
+    };
+  },
+  componentDidMount: function () {
+    this.refs.player.getDOMNode().currentTime = this.state.time;
+    this.interval = setInterval(this.updateCurrentTime, 5000);
+  },
+  componentWillUnmount: function () {
+    clearInterval(this.interval);
+  },
+  updateCurrentTime: function () {
+    local.set(this.props.src, this.refs.player.getDOMNode().currentTime)
+  },
+  render: function () {
+    return (
+      <video ref="player"
+             className="video-player"
+             autoplay controls
+             src={this.props.src}>
+      </video>
+    );
+  }
+});
+
+var Highlighter = React.createClass({
+  getInitialState: function () {
+    $.get(this.props.src, this.handleCode, 'text');
+    return { code: '' };
+  },
+  handleCode: function (code) {
+    console.log(code);
+    this.setState({ code: code });
+  },
+  render: function () {
+    return (
+      <pre>
+        <code dangerouslySetInnerHTML={{__html: hljs.highlightAuto(this.state.code).value}} />
+      </pre>
     );
   }
 });
@@ -98,17 +165,20 @@ var Blobs = React.createClass({
         );
       } else if (meta.mime.match(/^video\/mp4/)) {
         var control = (
-          <video className="video-player" autoplay controls src={url}>
-          </video>
+          <Video src={url} />
         );
       } else if (meta.mime.match(/^audio\//)) {
         var control = (
           <audio className="audio-player" controls autoplay src={url}>
           </audio>
         );
+      } else if (meta.mime.match(/application\/javascript/)) {
+        var control = (
+          <Highlighter src={url} />
+        );
       } else {
         var control = (
-          <div></div>
+          <div className="center">No Preview</div>
         );
       }
     }
@@ -116,15 +186,6 @@ var Blobs = React.createClass({
       <div className="side-panel">
         <a className="exit" href="#/">×</a>
         {control}
-      </div>
-    );
-  }
-});
-
-var SideMenu = React.createClass({
-  render: function () {
-    return (
-      <div className="side-menu">
       </div>
     );
   }
