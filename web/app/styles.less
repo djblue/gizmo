@@ -1,6 +1,7 @@
 @purple: #79589f;
 @dark: #3f3f44;
 @gray: #cbcbd2;
+@blue: #07a;
 @red: #cb3837;
 @red-light: lighten(@red, 5%);
 @red-dark: darken(@red, 10%);
@@ -94,11 +95,19 @@
 
 .video-player {
   width: 100%;
+  margin: 0 auto;
 }
 
 .audio-player {
   width: 100%;
-  margin: auto 10px;
+  margin: auto;
+}
+
+.side-panel-min {
+  .audio-player,
+  .video-player {
+    width: 70%;
+  }
 }
 
 html, body {
@@ -137,10 +146,11 @@ body {
   margin-right: @search-bar-right-width;
 }
 
-.search-item {
+.search-item,
+.search-item-active
+{
 
   color: @dark;
-  border-bottom: 1px solid #ddd;
   position: relative;
   min-height: 64px;
 
@@ -151,10 +161,16 @@ body {
   .preview {
     position: absolute;
     width: 64px;
-    background: #eaeaea;
     left: 0;
     bottom: 0;
     top: 0;
+    text-align: center;
+    line-height: 70px;
+    font-size: 30px;
+    background: @red;
+    color: white;
+    border-bottom: 1px solid @red-dark;
+    border-right: 1px solid @red-dark;
   }
 
   .meta {
@@ -163,6 +179,7 @@ body {
     top: 0;
     bottom: 0;
     padding: 10px;
+    border-bottom: 1px solid #ddd;
 
     .table {
 
@@ -172,29 +189,34 @@ body {
         text-align: right;
       }
 
+      .filename {
+        font-weight: bold;
+      }
+        
+      .size {
+        color: @red-light;
+      }
+
     }
 
   }
 
 }
 
-.search-item-inner {
-  border-radius: 2px;
-  background: white;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
+.search-item-active {
 
-.search-name {
   color: white;
-  border-top: 2px solid @red-dark;
-  background: @red;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
+  background: @red-dark !important;
+
+  .preview {
+    background: @red;
+    color: white;
+  }
+
+  .meta {
+    border-bottom: 1px solid @red-dark;
+  }
+
 }
 
 .search-btn {
@@ -220,6 +242,7 @@ body {
 .side-panel {
   display: inline-flex;
   position: fixed;
+  z-index: 100;
 
   text-align: center;
 
@@ -236,26 +259,8 @@ body {
   }
 }
 
-.side-panel-min {
-
-  display: inline-flex;
-  position: fixed;
-
-  text-align: left;
-
-  top: 42px;
+.padding {
   height: 42px;
-
-  width: 100%;
-
-  background: black;
-  opacity: 0.5;
-
-  .center {
-    display: blobk;
-    margin: auto;
-  }
-  
 }
 
 .side-panel,
@@ -264,8 +269,10 @@ body {
   .control {
   }
 
-  .btn {
+  .btn () {
+    position: absolute;
     .noselect();
+    color: white;
     height: 42px;
     width: 42px;
     font-size: 28px;
@@ -274,11 +281,47 @@ body {
     cursor: pointer;
     display: block;
     text-decoration: none;
-    color: black;
     background: @red;
     display: block;
+    border: 1px solid @red-dark;
+    z-index: 1000;
   }
 
+  .btn-left {
+    .btn();
+    left: 0;
+  }
+
+  .btn-right {
+    .btn();
+    right: 0;
+  }
+
+}
+
+.side-panel-min {
+
+  display: inline-flex;
+  position: fixed;
+  z-index: 100;
+
+  text-align: left;
+
+  top: 42px;
+  //bottom: 0;
+  height: 42px;
+
+  width: 100%;
+
+  background: @red;
+
+  .center {
+    display: blobk;
+    margin: auto;
+  }
+
+  border-bottom: 1px solid @red-dark;
+  
 }
 
 .side-menu {

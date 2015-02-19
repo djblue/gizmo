@@ -34,4 +34,13 @@ BlobStore.prototype.byId = function (id) {
   };
 };
 
+BlobStore.prototype.next = function (id) {
+  var items = this.getFiltered();
+  for (var i = 0; i < items.length; i++) {
+    if (items[i]._id === id) {
+      return items[i+1]._id;
+    }
+  }
+};
+
 module.exports = new BlobStore();

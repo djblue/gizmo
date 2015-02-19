@@ -11,6 +11,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 var RouteHandler = Router.RouteHandler;
+var Navigation = Router.Navigation;
 
 var blobStore = require('./blobStore');
 var local = require('./localStore');
@@ -69,34 +70,83 @@ var ItemView = React.createClass({
         return (meta.filename || '').toLowerCase().match(this.props.filter);
       }.bind(this)) 
       .map(function (meta) {
+
+      if (this.props.params !== undefined) {
+        if (this.props.params.id === meta._id) {
+          var active = true;
+        }
+      }
+
+      if (typeof meta.mime === 'string') {
+        if (meta.mime.match('video')) {
+          var icon = <i className="fa fa-play-circle"></i>
+        } else if (meta.mime.match('mpeg')) {
+          var icon = <i className="fa fa-music"></i>
+        } else if (meta.mime.match('image')) {
+          var icon = <i className="fa fa-picture-o"></i>
+        } else if (meta.mime.match('application/pdf')) {
+          var icon = <i className="fa fa-file-pdf-o"></i>
+        }
+      }
+
+      if (icon === undefined) {
+        var icon = <i className="fa fa-question-circle"></i>
+      }
+
       var link = "http://localhost:3000/blobs/" + meta._id;
+
       return (
-        <div className="search-item">
+        <div className={active? 'search-item-active' : 'search-item'}>
           <Link to="blobs" params={{id: meta._id}}>
             <div className="preview">
+              {icon}
             </div>
           </Link>
           <div className="meta">
             <table className="table">
               <tbody>
                 <tr>
-                  <td>{meta.filename}</td>
-                  <td>{moment(meta.uploaded).fromNow()}</td>
+                  <td className="filename">{meta.filename}</td>
+                  <td className="uploaded">{moment(meta.uploaded).fromNow()}</td>
                 </tr>
                 <tr>
                   <td></td>
-                  <td>{prettyBytes(meta.size)}</td>
+                  <td className="size">{prettyBytes(meta.size)}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
       );
+
     }.bind(this));
     return (
       <div>
       {items}
       </div>
+    );
+  }
+});
+
+var Audio = React.createClass({
+  componentDidMount: function () {
+    // audo play audio
+    this.refs.player.getDOMNode().play();
+    this.refs.player.getDOMNode().addEventListener('ended', this.props.timeout);
+  },
+  componentDidUpdate: function () {
+    this.refs.player.getDOMNode().play();
+  },
+  componentWillUnmount: function () {
+    this.refs.player.getDOMNode().removeEventListener('ended', this.props.timeout);
+  },
+  render: function () {
+    return (
+      <audio ref="player"
+             className="audio-player"
+             controls autoplay
+             src={this.props.src}>
+      </audio>
     );
   }
 });
@@ -147,6 +197,7 @@ var Highlighter = React.createClass({
 });
 
 var Blobs = React.createClass({
+  mixins: [Navigation],
   getInitialState: function () {
     return {
       minimized: false
@@ -157,11 +208,15 @@ var Blobs = React.createClass({
       minimized: !this.state.minimized
     });
   },
+  timeout: function () {
+    var next = blobStore.next(this.props.params.id)
+    this.transitionTo('blobs', {id: next});
+  },
   render: function () {
     var meta = this.props.meta.filter(blobStore.byId(this.props.params.id))[0];
     if (meta !== undefined) {
       var url = 'http://192.168.1.66:3000/blobs/' + meta._id;
-      if (meta.mime !== undefined) {
+      if (typeof meta.mime === 'string') {
         if (meta.mime.match(/^image\//)) {
           var control = (
             <img className="img" src={url} />
@@ -172,27 +227,39 @@ var Blobs = React.createClass({
           );
         } else if (meta.mime.match(/^audio\//)) {
           var control = (
-            <audio className="audio-player" controls autoplay src={url}>
-            </audio>
+            <Audio timeout={this.timeout} src={url}/>
           );
         } else if (meta.mime.match(/application\/javascript/)) {
           var control = (
             <Highlighter src={url} />
           );
-        } else {
+        }
+      }
+      if (control === undefined) {
           var control = (
             <div className="center">No Preview</div>
           );
-        }
+      }
+      if (this.state.minimized) {
+        var padding = (
+          <div className="padding"></div>
+        );
       }
       return (
-        <div className={(this.state.minimized? 'side-panel-min' : 'side-panel')}>
-          <div className="control">
-            <span className="btn" onClick={this.toggle}>~</span>
-          </div>
-          {control}
-          <div className="control">
-            <a className="btn" href="#/">×</a>
+        <div>
+          {padding}
+          <div className={(this.state.minimized? 'side-panel-min' : 'side-panel')}>
+            <div className="control">
+              <span className="btn-left" onClick={this.toggle}>
+                <i className="fa fa-bars"></i>
+              </span>
+            </div>
+            {control}
+            <div className="control">
+              <a className="btn-right" href="#/">
+                <i className="fa fa-times"></i>
+              </a>
+            </div>
           </div>
         </div>
       );
@@ -225,8 +292,8 @@ var App = React.createClass({
     return (
       <div>
         <SearchBar onSearch={this.handleSearch} />
-        <ItemView meta={this.state.items} />
         <RouteHandler {...this.props} meta={this.state.items} />
+        <ItemView {...this.props} meta={this.state.items} />
       </div>
     );
   }
