@@ -54,16 +54,15 @@ var ItemView = React.createClass({
       .map(function (meta) {
       var link = "http://localhost:3000/blobs/" + meta._id;
       return (
-        <Link to="blobs" params={{id: meta._id}} activeStyle={{border: '1px solid green'}}>
         <div className="search-item">
-          <div className="search-item-inner">
-            <div className="search-name">
-              <span className="pull-left">{meta.filename.slice(0,20)}</span>
-              <span className="pull-right">{prettyBytes(meta.size)}</span>
+          <Link to="blobs" params={{id: meta._id}}>
+            <div className="preview">
             </div>
+          </Link>
+          <div className="meta">
+            <span>{meta.filename}</span>
           </div>
         </div>
-        </Link>
       );
     }.bind(this));
     return (
@@ -91,7 +90,7 @@ var Blobs = React.createClass({
   },
   render: function () {
     var meta = this.state;
-    var url = 'http://localhost:3000/blobs/' + this.state._id;
+    var url = 'http://192.168.1.66:3000/blobs/' + this.state._id;
     if (meta.mime !== undefined) {
       if (meta.mime.match(/^image\//)) {
         var control = (
@@ -99,8 +98,13 @@ var Blobs = React.createClass({
         );
       } else if (meta.mime.match(/^video\/mp4/)) {
         var control = (
-          <video className="img" autoplay controls src={url}>
+          <video className="video-player" autoplay controls src={url}>
           </video>
+        );
+      } else if (meta.mime.match(/^audio\//)) {
+        var control = (
+          <audio className="audio-player" controls autoplay src={url}>
+          </audio>
         );
       } else {
         var control = (
@@ -110,9 +114,17 @@ var Blobs = React.createClass({
     }
     return (
       <div className="side-panel">
-        <div>id: {this.state._id}</div>
-        <div>id: {this.state.mime}</div>
+        <a className="exit" href="#/">×</a>
         {control}
+      </div>
+    );
+  }
+});
+
+var SideMenu = React.createClass({
+  render: function () {
+    return (
+      <div className="side-menu">
       </div>
     );
   }
@@ -139,11 +151,11 @@ var App = React.createClass({
     });
   },
   render: function () {
+    //<ItemView {...this.props} filter={this.state.searchText} meta={this.state.items} />
     return (
       <div>
         <SearchBar onSearch={this.handleSearch} />
-        <ItemView filter={this.state.searchText} meta={this.state.items} />
-        <RouteHandler {...this.props}/>
+        <RouteHandler {...this.props} filter={this.state.searchText} meta={this.state.items} />
       </div>
     );
   }
@@ -151,8 +163,9 @@ var App = React.createClass({
 
 
 var routes = (
-  <Route name="app" path="/" handler={App}>
-    <Route ignoreScrollBehavior={true} name="blobs" path="/blobs/:id" handler={Blobs}/>
+  <Route ignoreScrollBehavior={true} name="app" path="/" handler={App}>
+    <Route name="blobs" path="/blobs/:id" handler={Blobs}/>
+    <DefaultRoute name="index" handler={ItemView} />
   </Route>
 );
 

@@ -4,7 +4,7 @@ var blobs;
 
 var getBlobs = exports.getBlobs = function (done) {
   if (blobs === undefined) {
-    $.getJSON('http://localhost:3000/search', function (b) {
+    $.getJSON('http://192.168.1.66:3000/search', function (b) {
       blobs = b;
       done(b);
     });

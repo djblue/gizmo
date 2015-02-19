@@ -6,6 +6,10 @@
 @red-dark: darken(@red, 10%);
 @green: #74c080;
 
+.debug () {
+  border: 1px dashed orange;
+}
+
 ::-webkit-scrollbar { display: none; }
 
 .rounded (@color) {
@@ -32,7 +36,7 @@
   padding: 0;
   font-family: sans-serif;
   box-sizing: border-box;
-  font-size: 12pt;
+  font-size: 14pt;
 }
 
 .contianer {
@@ -100,15 +104,30 @@ button {
 }
 
 .img {
-  display: inline-block;
+  display: block;
+  margin: auto;
   max-width: 100%;
   max-height: 100%;
 }
 
+.video-player {
+  width: 100%;
+}
+
+.audio-player {
+  width: 100%;
+  margin: auto 10px;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
 
 body {
   margin-top: 42px;
   color: white;
+  max-width: 100%;
 }
 
 .search-bar {
@@ -136,17 +155,34 @@ body {
   margin-right: @search-bar-right-width;
 }
 
-body {
-  background: #eeeeee;
-}
-
 .search-item {
-  padding-left: 10px;
-  padding-top: 10px;
-  width: 25%;
-  height: 300px;
-  display: inline-block;
-  text-align: center;
+
+  color: @dark;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  min-height: 64px;
+
+  &:nth-child(even) {
+    background: #eee;
+  }
+
+  .preview {
+    position: absolute;
+    width: 64px;
+    background: #eaeaea;
+    left: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+  .meta {
+    margin-left: 64px;
+    left: 64px;
+    top: 0;
+    bottom: 0;
+    padding: 10px;
+  }
+
 }
 
 .search-item-inner {
@@ -189,17 +225,40 @@ body {
 }
 
 .side-panel {
+  display: inline-flex;
   position: fixed;
 
   text-align: center;
 
-  //width: 400px;
-  height: 400px;
-  left: 0;
   right: 0;
   bottom: 0;
+  top: 42px;
+
+  width: 100%;
 
   background: black;
-  border-top: 1px solid @red-dark;
-  //padding: 10px;
+}
+
+.side-menu {
+  .debug();
+  //width: 200px;
+  //height: 200px;
+  background: @dark;
+  position: absolute;
+}
+
+.exit {
+  margin: 10px;
+  position: fixed;
+  right: 0;
+  font-size: 38px;
+  color: black;
+  text-decoration: none;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  border-radius: 100%;
+  background: rgba(255,255,255,0.2);
+  z-index: 10000;
+  text-align: center;
 }
