@@ -1,24 +1,37 @@
+var util = require('util');
 var $ = require('jquery');
+var EventEmitter = require('events').EventEmitter;
 
-var blobs;
+function BlobStore () {
+  this.blobs = [];
+  this.filterText = '';
+  EventEmitter.call(this);
+}
 
-var getBlobs = exports.getBlobs = function (done) {
-  if (blobs === undefined) {
-    $.getJSON('http://192.168.1.66:3000/search', function (b) {
-      blobs = b;
-      done(b);
-    });
-  } else {
-    done(blobs);
-  }
+util.inherits(BlobStore, EventEmitter);
+
+BlobStore.prototype.fetch = function () {
+  $.getJSON('http://192.168.1.66:3000/search', function (b) {
+    this.blobs = b;
+    this.emit('update', this.blobs);
+  }.bind(this));
 };
 
-exports.getBlobById = function (id, done) {
-  getBlobs(function (blobs) {
-    done(
-      blobs.filter(function (blob) {
-        return blob._id === id;
-      })[0]
-    );
-  });
+BlobStore.prototype.filter = function (t) {
+  this.filterText = t;
+  this.emit('filtered', this.getFiltered());
 };
+
+BlobStore.prototype.getFiltered = function () {
+  return this.blobs.filter(function (meta) {
+    return (meta.filename || '').toLowerCase().match(this.filterText);
+  }.bind(this));
+};
+
+BlobStore.prototype.byId = function (id) {
+  return function (blob) {
+    return blob._id === id;
+  };
+};
+
+module.exports = new BlobStore();

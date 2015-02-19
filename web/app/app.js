@@ -21,7 +21,13 @@ var SearchBar = React.createClass({
       searchText: ''
     };
   },
+  componentDidMount: function () {
+    blobStore.on('update', this.handleUpdate);
+  },
+  handleUpdate: function () {
+  },
   handleSearch: function (e) {
+    blobStore.filter(e.target.value);
     this.setState({
       searchText: e.target.value
     });
@@ -141,59 +147,51 @@ var Highlighter = React.createClass({
 });
 
 var Blobs = React.createClass({
-  getInitialState: function () {
-    return {
-      _id: this.props.params.id
-    };
-  },
-  componentWillReceiveProps: function (nextProps) {
-    blobStore.getBlobById(nextProps.params.id, this.updateBlob);
-  },
-  componentWillMount: function () {
-    blobStore.getBlobById(this.state._id, this.updateBlob);
-  },
-  updateBlob: function (blob) {
-    this.setState(blob);
-  },
   render: function () {
-    var meta = this.state;
-    var url = 'http://192.168.1.66:3000/blobs/' + this.state._id;
-    if (meta.mime !== undefined) {
-      if (meta.mime.match(/^image\//)) {
-        var control = (
-          <img className="img" src={url} />
-        );
-      } else if (meta.mime.match(/^video\/mp4/)) {
-        var control = (
-          <Video src={url} />
-        );
-      } else if (meta.mime.match(/^audio\//)) {
-        var control = (
-          <audio className="audio-player" controls autoplay src={url}>
-          </audio>
-        );
-      } else if (meta.mime.match(/application\/javascript/)) {
-        var control = (
-          <Highlighter src={url} />
-        );
-      } else {
-        var control = (
-          <div className="center">No Preview</div>
-        );
+    var meta = this.props.meta.filter(blobStore.byId(this.props.params.id))[0];
+    if (meta !== undefined) {
+      var url = 'http://192.168.1.66:3000/blobs/' + meta._id;
+      if (meta.mime !== undefined) {
+        if (meta.mime.match(/^image\//)) {
+          var control = (
+            <img className="img" src={url} />
+          );
+        } else if (meta.mime.match(/^video\/mp4/)) {
+          var control = (
+            <Video src={url} />
+          );
+        } else if (meta.mime.match(/^audio\//)) {
+          var control = (
+            <audio className="audio-player" controls autoplay src={url}>
+            </audio>
+          );
+        } else if (meta.mime.match(/application\/javascript/)) {
+          var control = (
+            <Highlighter src={url} />
+          );
+        } else {
+          var control = (
+            <div className="center">No Preview</div>
+          );
+        }
       }
+      return (
+        <div className="side-panel">
+          <a className="exit" href="#/">×</a>
+          {control}
+        </div>
+      );
+    } else {
+      return (<div></div>);
     }
-    return (
-      <div className="side-panel">
-        <a className="exit" href="#/">×</a>
-        {control}
-      </div>
-    );
   }
 });
 
 var App = React.createClass({
   componentWillMount: function () {
-    blobStore.getBlobs(this.updateItems);
+    blobStore.fetch();
+    blobStore.on('update', this.updateItems);
+    blobStore.on('filtered', this.updateItems);
   },
   updateItems: function (items) {
     this.setState({
@@ -202,21 +200,18 @@ var App = React.createClass({
   },
   getInitialState: function () {
     return {
-      searchText: '',
       items: []
     };
   },
   handleSearch: function (text) {
-    this.setState({
-      searchText: text
-    });
+    blobStore.filter(text);
   },
   render: function () {
-    //<ItemView {...this.props} filter={this.state.searchText} meta={this.state.items} />
     return (
       <div>
         <SearchBar onSearch={this.handleSearch} />
-        <RouteHandler {...this.props} filter={this.state.searchText} meta={this.state.items} />
+        <ItemView meta={this.state.items} />
+        <RouteHandler {...this.props} meta={this.state.items} />
       </div>
     );
   }
@@ -226,7 +221,6 @@ var App = React.createClass({
 var routes = (
   <Route ignoreScrollBehavior={true} name="app" path="/" handler={App}>
     <Route name="blobs" path="/blobs/:id" handler={Blobs}/>
-    <DefaultRoute name="index" handler={ItemView} />
   </Route>
 );
 
