@@ -42,43 +42,11 @@
 .contianer {
   width: 9600px;
 }
-button {
-  cursor: pointer;
-}
 .btn-group {
   float: right;
 }
 .btn {
-  border: none;
-  outline: none;
-  padding: 4px 12px;
-  border-radius: 5px;
   color: white;
-  background: #79589f;
-  border: 1px solid #79589f;
-}
-.btn-out {
-  border: none;
-  outline: none;
-  padding: 4px 12px;
-  border-radius: 5px;
-  color: white;
-  background: #79589f;
-  color: #79589f;
-  background: white;
-  border: 1px solid #79589f;
-}
-.btn-inv {
-  border: none;
-  outline: none;
-  padding: 4px 12px;
-  border-radius: 5px;
-  color: white;
-  background: #79589f;
-  border: 1px solid #79589f;
-  color: #79589f;
-  background: white;
-  border: 1px solid white;
 }
 .input[disabled] {
   background: #f5f5f7;
@@ -220,23 +188,41 @@ body {
 .side-panel .center {
   margin: auto;
 }
+.side-panel-min {
+  display: inline-flex;
+  position: fixed;
+  text-align: left;
+  top: 42px;
+  height: 42px;
+  width: 100%;
+  background: black;
+  opacity: 0.5;
+}
+.side-panel-min .center {
+  display: blobk;
+  margin: auto;
+}
+.side-panel .btn,
+.side-panel-min .btn {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 42px;
+  width: 42px;
+  font-size: 28px;
+  line-height: 42px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  background: #cb3837;
+  display: block;
+}
 .side-menu {
   border: 1px dashed orange;
   background: #3f3f44;
   position: absolute;
-}
-.exit {
-  margin: 10px;
-  position: fixed;
-  right: 0;
-  font-size: 38px;
-  color: black;
-  text-decoration: none;
-  width: 48px;
-  height: 48px;
-  line-height: 48px;
-  border-radius: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  z-index: 10000;
-  text-align: center;
 }

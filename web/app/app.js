@@ -147,6 +147,16 @@ var Highlighter = React.createClass({
 });
 
 var Blobs = React.createClass({
+  getInitialState: function () {
+    return {
+      minimized: false
+    };
+  },
+  toggle: function () {
+    this.setState({
+      minimized: !this.state.minimized
+    });
+  },
   render: function () {
     var meta = this.props.meta.filter(blobStore.byId(this.props.params.id))[0];
     if (meta !== undefined) {
@@ -176,9 +186,14 @@ var Blobs = React.createClass({
         }
       }
       return (
-        <div className="side-panel">
-          <a className="exit" href="#/">×</a>
+        <div className={(this.state.minimized? 'side-panel-min' : 'side-panel')}>
+          <div className="control">
+            <span className="btn" onClick={this.toggle}>~</span>
+          </div>
           {control}
+          <div className="control">
+            <a className="btn" href="#/">×</a>
+          </div>
         </div>
       );
     } else {
