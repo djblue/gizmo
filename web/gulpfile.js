@@ -1,8 +1,11 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
+    buffer = require('vinyl-buffer'),
+    uglify = require('gulp-uglify'),
     nodeResolve = require('resolve'),
     connect = require('gulp-connect'),
     less = require('gulp-less'),
+    minifyCSS = require('gulp-minify-css'),
     browserify = require('browserify'),
     reactify = require('reactify'),
     source = require('vinyl-source-stream'),
@@ -27,31 +30,32 @@ gulp.task('vendor', function () {
   getNPMPackageIds().forEach(function (id) {
     b.require(nodeResolve.sync(id), { expose: id });
   });
-  var stream = b.bundle()
-                .pipe(source('vendor.js'));
+  var stream = b.bundle().pipe(source('vendor.js'));
+  if (production) {
+    stream = stream.pipe(buffer())
+                   .pipe(uglify())
+  }
   stream.pipe(gulp.dest('./dist/'));
   return stream;
 });
 
 
 gulp.task('app', function () {
-
   var b = browserify('./app/app.js', {
     debug: !production
   });
-
   b.transform(reactify);
-
   getNPMPackageIds().forEach(function (id) {
     b.external(id);
   });
-
   var stream = b.bundle()
                 .pipe(source('app.js'));
-
+  if (production) {
+    stream = stream.pipe(buffer())
+                   .pipe(uglify())
+  }
   stream.pipe(gulp.dest('./dist'))
         .pipe(connect.reload());
-
   return stream;
 });
 
@@ -69,12 +73,16 @@ gulp.task('html', function () {
 });
 
 gulp.task('less', function () {
-  gulp.src('./app/*.less')
+  var stream = gulp.src('./app/*.less')
     .pipe(less({
       paths: [ path.join(__dirname) ]
     }))
-    .pipe(gulp.dest('./dist'))
-    .pipe(connect.reload());
+  if (production) {
+    stream = stream.pipe(minifyCSS());
+  }
+  stream.pipe(gulp.dest('./dist'))
+        .pipe(connect.reload());
+  return stream;
 });
 
 gulp.task('watch', function () {
