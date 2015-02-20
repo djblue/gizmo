@@ -14,7 +14,7 @@ exports.run = function () {
   var options = {
     hostname: 'localhost',
     port: 3000,
-    path: '/testing',
+    path: '/blobs',
     method: 'PUT'
   };
 
@@ -23,15 +23,21 @@ exports.run = function () {
     log.bug(res.statusCode);
     log.bug(res.headers);
 
-    res.on('data', function (chunk) {
-      log.bug(chunk);
+    var body = "";
+
+    res.on('data', function (data) {
+      body += data;
+    });
+
+    res.on('end', function () {
+      log.bug(body);
       console.log('sha1-' + hash.digest('hex'));
     });
 
   });
 
   req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
+    log.err('problem with request: ' + e.message);
   });
 
   process.stdin.on('data', function (data) {
