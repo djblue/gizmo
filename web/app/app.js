@@ -249,6 +249,9 @@ var Blobs = React.createClass({
         var padding = (
           <div className="padding"></div>
         );
+        var toggle = <i className="fa fa-plus"></i>
+      } else {
+        var toggle = <i className="fa fa-minus"></i>
       }
       return (
         <div onWheel={this.stop} onScroll={this.stop} onTouchMove={this.stop}>
@@ -256,7 +259,7 @@ var Blobs = React.createClass({
           <div className={(this.state.minimized? 'side-panel-min' : 'side-panel')}>
             <div className="control">
               <span className="btn-left" onClick={this.toggle}>
-                <i className="fa fa-bars"></i>
+                {toggle}
               </span>
             </div>
             {control}
