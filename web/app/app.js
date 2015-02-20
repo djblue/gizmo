@@ -197,6 +197,10 @@ var Highlighter = React.createClass({
 });
 
 var Blobs = React.createClass({
+  stop: function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  },
   mixins: [Navigation],
   getInitialState: function () {
     return {
@@ -246,7 +250,7 @@ var Blobs = React.createClass({
         );
       }
       return (
-        <div>
+        <div onWheel={this.stop} onScroll={this.stop} onTouchMove={this.stop}>
           {padding}
           <div className={(this.state.minimized? 'side-panel-min' : 'side-panel')}>
             <div className="control">
@@ -306,6 +310,7 @@ var routes = (
   </Route>
 );
 
+React.initializeTouchEvents(true);
 Router.run(routes, function (Handler, state) {
   var params = state.params;
   React.render(<Handler params={params}/>, document.body);
