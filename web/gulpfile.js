@@ -83,5 +83,5 @@ gulp.task('watch', function () {
   gulp.watch(['./app/*.js'],   ['app'])
 });
 
-gulp.task('dist', ['html', 'vendor', 'app']);
+gulp.task('dist', ['html', 'less', 'vendor', 'app']);
 gulp.task('default', ['connect', 'dist', 'watch']);
