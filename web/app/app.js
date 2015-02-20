@@ -204,10 +204,11 @@ var Blobs = React.createClass({
   mixins: [Navigation],
   getInitialState: function () {
     return {
-      minimized: false
+      minimized: local.get('minimized') || false
     };
   },
   toggle: function () {
+    local.set('minimized', !this.state.minimized);
     this.setState({
       minimized: !this.state.minimized
     });
