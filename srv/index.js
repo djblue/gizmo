@@ -24,6 +24,7 @@ var logo = fs.readFileSync(path.join(__dirname, 'logo.txt'), 'utf8');
 
 console.log(logo);
 
+require('../web/').setup(app);
 require('./blobs').setup(app);
 require('./meta').setup(app);
 require('./tags').setup(app);
