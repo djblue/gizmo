@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     reactify = require('reactify'),
     source = require('vinyl-source-stream'),
+    svg2png = require('gulp-svg2png'),
     path = require('path');
 
 var production = (process.env.NODE_ENV === 'production');
@@ -64,6 +65,12 @@ gulp.task('connect', function () {
     root: 'dist',
     livereload: true
   });
+});
+
+gulp.task('favicon', function () {
+  gulp.src('./app/favicon.svg')
+    .pipe(svg2png())
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('html', function () {
