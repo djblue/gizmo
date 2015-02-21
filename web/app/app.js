@@ -93,7 +93,7 @@ var ItemView = React.createClass({
         var icon = <i className="fa fa-question-circle"></i>
       }
 
-      var link = "http://localhost:3000/blobs/" + meta._id;
+      var link = "/blobs/" + meta._id;
 
       return (
         <div className={active? 'search-item-active' : 'search-item'}>
@@ -220,7 +220,7 @@ var Blobs = React.createClass({
   render: function () {
     var meta = this.props.meta.filter(blobStore.byId(this.props.params.id))[0];
     if (meta !== undefined) {
-      var url = 'http://192.168.1.66:3000/blobs/' + meta._id;
+      var url = '/blobs/' + meta._id;
       if (typeof meta.mime === 'string') {
         if (meta.mime.match(/^image\//)) {
           var control = (

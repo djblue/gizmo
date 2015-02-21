@@ -11,7 +11,7 @@ function BlobStore () {
 util.inherits(BlobStore, EventEmitter);
 
 BlobStore.prototype.fetch = function () {
-  $.getJSON('http://192.168.1.66:3000/search', function (b) {
+  $.getJSON('/search', function (b) {
     this.blobs = b;
     this.emit('update', this.blobs);
   }.bind(this));
