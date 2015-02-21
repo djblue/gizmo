@@ -15,7 +15,7 @@
     "body-parser": "^1.11.0",
     "colors": "^1.0.3",
     "compression": "^1.4.1",
-    "content-addressable-store": "^1.5.1",
+    "content-addressable-store": "git://github.com/djblue/content-addressable-store.git#master",
     "express": "^4.11.1",
     "mime-types": "^2.0.8",
     "minimist": "^1.1.0",
