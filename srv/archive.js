@@ -1,5 +1,3 @@
-var log = require('../lib/log');
-
 var meta = require('./meta').db;
 
 var Unrar = require('unrar');
@@ -37,7 +35,9 @@ exports.setup = function (app) {
             res.status(500).json(err);
           } else {
             var stream = archive.stream(req.query.path);
-            stream.on('error', log.err);
+            stream.on('error', function (err) {
+              console.log(err);
+            });
             stream.pipe(res);
           }
         });
