@@ -46,11 +46,15 @@ var cmd = args._[0];
 if (cmd === undefined) {
   usage();
 } else {
-  try {
-    require('./' + cmd).run(args);
-  } catch (e) {
-    log.bug(e);
-    log.err('Command not found: ' + cmd);
-    process.exit(1);
+  var exists = fs.existsSync(path.resolve(__dirname, cmd + '.js'));
+  if (!exists) {
+    log.err('the command \'cmd\' does not exists');
+  } else {
+    try {
+      require('./' + cmd).run(args);
+    } catch (err) {
+      log.err(err);
+      process.exit(1);
+    }
   }
 }
