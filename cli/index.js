@@ -48,7 +48,7 @@ if (cmd === undefined) {
 } else {
   var exists = fs.existsSync(path.resolve(__dirname, cmd + '.js'));
   if (!exists) {
-    log.err('the command \'cmd\' does not exists');
+    log.err('the command \'' + cmd + '\' does not exists');
   } else {
     try {
       require('./' + cmd).run(args);
