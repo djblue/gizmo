@@ -17,6 +17,7 @@
     "compression": "^1.4.1",
     "content-addressable-store": "git://github.com/djblue/content-addressable-store.git#master",
     "express": "^4.11.1",
+    "jwt-simple": "^0.2.0",
     "mime-types": "^2.0.8",
     "minimist": "^1.1.0",
     "moment": "^2.9.0",
@@ -29,8 +30,7 @@
     "text-table": "^0.2.0",
     "unrar": "^0.1.2"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
