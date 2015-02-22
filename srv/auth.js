@@ -1,5 +1,3 @@
-var log = require('../lib/log');
-
 // basic authenticatin with jwt
 var jwt = require('jwt-simple');
 
