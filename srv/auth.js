@@ -35,12 +35,13 @@ exports.setup = function (app) {
         message: 'need to provide \'Authorization\' header'
       });
     } else {
-      var token = req.headers.authorization.match('Bearer (.*)')[1];
-      if (token === undefined) {
+      var token = req.headers.authorization.match('Bearer (.*)');
+      if (token === null) {
         res.status(400).json({
           message: 'malformed \'Authorization\' header'
         });
       } else {
+        token = token[1];
         try {
           var decoded = jwt.decode(token, config.secret);
           if (decoded.admin === undefined) {
