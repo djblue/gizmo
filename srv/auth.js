@@ -30,18 +30,20 @@ exports.setup = function (app) {
   // check http header for TOKEN
   // ex: Authorization: Bearer TOKEN
   app.use(function (req, res, next) {
-    if (req.headers.authorization === undefined) {
+    if (req.query.auth === undefined && req.headers.authorization === undefined) {
       res.status(400).json({
-        message: 'need to provide \'Authorization\' header'
+        message: 'need to provide \'Authorization\' header or \'auth\' param'
       });
     } else {
-      var token = req.headers.authorization.match('Bearer (.*)');
+      var token = req.query.auth || req.headers.authorization.match('Bearer (.*)');
       if (token === null) {
         res.status(400).json({
-          message: 'malformed \'Authorization\' header'
+          message: 'no valid auth token'
         });
       } else {
-        token = token[1];
+        if (typeof token !== 'string') {
+          token = token[1];
+        }
         try {
           var decoded = jwt.decode(token, config.secret);
           if (decoded.admin === undefined) {
@@ -53,7 +55,7 @@ exports.setup = function (app) {
           }
         } catch (_) {
           res.status(400).json({
-            message: 'malformed \'Authorization\' header'
+            message: 'no valid auth token'
           });
         }
       }
