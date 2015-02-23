@@ -16,6 +16,7 @@
     "colors": "^1.0.3",
     "compression": "^1.4.1",
     "content-addressable-store": "git://github.com/djblue/content-addressable-store.git#master",
+    "cors": "^2.5.3",
     "express": "^4.11.1",
     "jsonfile": "^2.0.0",
     "jwt-simple": "^0.2.0",
