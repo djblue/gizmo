@@ -17,18 +17,22 @@
     "compression": "^1.4.1",
     "content-addressable-store": "git://github.com/djblue/content-addressable-store.git#master",
     "express": "^4.11.1",
+    "jsonfile": "^2.0.0",
     "jwt-simple": "^0.2.0",
     "mime-types": "^2.0.8",
     "minimist": "^1.1.0",
+    "mkdirp": "^0.5.0",
     "moment": "^2.9.0",
     "morgan": "^1.5.1",
     "nedb": "^1.1.1",
     "pretty-bytes": "^1.0.2",
     "progress": "^1.1.8",
+    "prompt": "^0.2.14",
     "qrcode-terminal": "^0.9.5",
     "tabtab": "git://github.com/djblue/node-tabtab.git#master",
     "text-table": "^0.2.0",
-    "unrar": "^0.1.2"
+    "unrar": "^0.1.2",
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {},
   "scripts": {

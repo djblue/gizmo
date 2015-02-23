@@ -1,6 +1,8 @@
-var log = require('../lib/log');
+var lib = require('../lib');
+var log = lib.log;
+var client = lib.client;
+var http = lib.http;
 
-var http = require('http');
 var crypto = require('crypto');
 var colors = require('colors');
 var mime = require('mime-types');
@@ -9,7 +11,6 @@ var fs = require('fs');
 var path = require('path');
 
 var ProgressBar = require('progress');
-
 
 exports.usage = function (bin, cmd) {
   console.log('Usage: ' + bin + ' ' + cmd+ ' [OPTIONS] <file>\n');
@@ -28,39 +29,20 @@ exports.run = function (args) {
 
       var meta = {};
 
-      var options = {
-        hostname: 'localhost',
-        port: 3000,
-        path: '/meta/sha1-' + hash,
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-
-      var body = "";
-
-      log.bug(options.method + ' ' + options.path);
-      var req = http.request(options, function (res) {
-        res.on('data', function (chunk) {
-          body += chunk;
-        });
-        res.on('end', function () {
-          log.bug(res.statusCode);
-          log.bug(JSON.parse(body));
-        });
-      });
-
       meta.size = stat.size;
       meta.filename = path.basename(fname);
       meta.uploaded = (new Date()).toISOString();
       meta.mime = mime.lookup(meta.filename);
 
-      req.write(JSON.stringify(meta));
-      req.end();
+      var p = '/meta/sha1-' + hash;
 
-      console.log(JSON.stringify(meta))
-
+      client.putJSON(p, meta, function (err, body) {
+        if (err) {
+          log.err(err);
+        } else {
+          log.bug(body);
+        }
+      });
     }
 
     var bar = new ProgressBar('uploading [:bar] :percent :etas', {
@@ -74,33 +56,25 @@ exports.run = function (args) {
     var hash = crypto.createHash('sha1');
 
     var options = {
-      hostname: 'localhost',
-      port: 3000,
       path: '/blobs',
-      method: 'PUT',
       headers: {
         'Transfer-Encoding': 'chunked'
       }
     };
 
-    log.bug(options.method + ' ' + options.path);
-    var req = http.request(options, function(res) {
-
-      log.bug(res.statusCode);
-      log.bug(res.headers);
-
-      res.on('data', function (chunk) {
-        console.log(JSON.parse(chunk));
-        hash = hash.digest('hex')
+    var req = client.put(options, http.bufferBodyJSON(function (err, body) {
+      if (err) {
+        log.err(err);
+      } else {
+        hash = hash.digest('hex');
+        console.log(body);
         console.log('sha1-' + hash);
-      });
-
-      res.on('end', updateMeta);
-
-    });
+        updateMeta();
+      }
+    }));
 
     req.on('error', function(e) {
-      console.log('problem with request: ' + e.message);
+      log.err(e.message);
     });
 
     file.on('data', function (data) {

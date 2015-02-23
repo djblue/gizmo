@@ -1,4 +1,6 @@
-var log = require('../lib/log');
+var lib = require('../lib');
+var log = lib.log;
+var client = lib.client;
 
 var table = require('text-table');
 
@@ -46,8 +48,17 @@ exports.run = function (args) {
     method: 'GET'
   };
 
+  client.getJSON('/search?' + parsedArgs, function (err, body) {
+    if (err) {
+      log.err(err);
+    } else {
+      console.log(util.inspect(body, { showHidden: true, depth: null, colors: true }));
+    }
+  });
+
   log.bug(options);
 
+/*
   var req = http.request(options, function (res) {
     log.bug(res.statusCode);
     var body = "";
@@ -70,5 +81,6 @@ exports.run = function (args) {
   });
 
   req.end();
+  */
 
 };

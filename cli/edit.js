@@ -1,87 +1,37 @@
-var log = require('../lib/log');
+var lib = require('../lib');
+var log = lib.log;
+var client = lib.client;
 
-var http = require('http');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
-
 
 exports.description = "Edit metadata of certain blob.";
 
 var getMeta = function (hash, done) {
 
-  var options = {
-    hostname: 'localhost',
-    port: 3000,
-    path: '/meta/' + hash,
-    method: 'GET'
-  };
+  var p = '/meta/' + hash;
 
-  var req = http.request(options, function(res) {
-
-    log.bug(res.statusCode);
-    log.bug(res.headers);
-
-    var meta = "";
-
-    res.on('data', function (data) {
-      meta += data;
-    });
-
-    res.on('end', function () {
-      try {
-        done(null, JSON.parse(meta));
-      } catch (err) {
-        done(err);
-      }
-    });
-
+  client.getJSON(p, function (err, meta) {
+    if (err) {
+      done(err);
+    } else {
+      done(null, meta);
+    }
   });
-
-  req.on('error', function(err) {
-    done(err);
-  });
-
-  req.end();
 
 };
 
-var saveMeta = function (contents, hash, done) {
+var saveMeta = function (meta, hash, done) {
 
-  var body = JSON.stringify(contents);
+  var p = '/meta/' + hash;
 
-  var options = {
-    hostname: 'localhost',
-    port: 3000,
-    path: '/meta/' + hash,
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': body.length
+  client.putJSON(p, meta, function (err, body) {
+    if (err) {
+      done(err);
+    } else {
+      done(null, body);
     }
-  };
-
-  var req = http.request(options, function(res) {
-
-    var body = "";
-
-    res.on('data', function (data) {
-      body += data;
-    });
-
-    res.on('end', function () {
-      try {
-        done(null, JSON.parse(body));
-      } catch (err) {
-        done(err);
-      }
-    });
-
   });
-
-  req.on('error', done);
-
-  req.write(body);
-  req.end();
 
 };
 
@@ -90,7 +40,7 @@ exports.run = function (args) {
   var blob = args._[1];
   
   if (blob === undefined) {
-    log.err('Please supply blob');
+    log.err('please supply blob');
   } else {
     getMeta(args._[1], function (err, meta) {
       if (err) {

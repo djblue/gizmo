@@ -1,6 +1,6 @@
-var log = require('../lib/log');
-
-var http = require('http');
+var lib = require('../lib');
+var log = lib.log;
+var client = lib.client;
 
 var usage = exports.usage = function (bin, cmd) {
   console.log('Usage: ' + bin + ' ' + cmd + ' [OPTIONS] <sha1>\n');
@@ -10,26 +10,17 @@ var usage = exports.usage = function (bin, cmd) {
 var desc = exports.description = "Get content from gizmod";
 
 exports.run = function (args) {
-
   if (args._[1] === undefined) {
     log.err('please include <sha1>');
     usage();
   } else {
     var options = {
-      hostname: 'localhost',
-      port: 3000,
-      path: '/blobs/' + args._[1],
-      method: 'GEt'
+      path: '/blobs/' + args._[1]
     };
-
-    var req = http.request(options, function(res) {
-
+    client.get(options, function (res) {
       log.bug(res.statusCode);
       log.bug(res.headers);
-
       res.pipe(process.stdout);
-
     }).end();
   }
-
 };
