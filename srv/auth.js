@@ -38,11 +38,13 @@ exports.setup = function (app) {
       var token = req.query.auth || req.headers.authorization.match('Bearer (.*)');
       if (token === null) {
         res.status(400).json({
-          message: 'no valid auth token'
+          message: 'no auth token provided'
         });
       } else {
         if (typeof token !== 'string') {
           token = token[1];
+        } else {
+          delete req.query.auth;
         }
         try {
           var decoded = jwt.decode(token, config.secret);
@@ -55,7 +57,7 @@ exports.setup = function (app) {
           }
         } catch (_) {
           res.status(400).json({
-            message: 'no valid auth token'
+            message: 'provided token is not valid'
           });
         }
       }
