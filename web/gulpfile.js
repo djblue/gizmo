@@ -95,7 +95,7 @@ gulp.task('less', function () {
 gulp.task('watch', function () {
   gulp.watch(['./app/*.html'], ['html']);
   gulp.watch(['./app/*.less'], ['less'])
-  gulp.watch(['./app/*.js'],   ['app'])
+  gulp.watch(['./app/**/*.js'],   ['app'])
 });
 
 gulp.task('dist', ['favicon', 'html', 'less', 'vendor', 'app']);

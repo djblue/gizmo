@@ -1,6 +1,7 @@
 var util = require('util');
-var $ = require('jquery');
 var EventEmitter = require('events').EventEmitter;
+
+var client = require('./client');
 
 function BlobStore () {
   this.blobs = [];
@@ -11,14 +12,18 @@ function BlobStore () {
 util.inherits(BlobStore, EventEmitter);
 
 BlobStore.prototype.fetch = function () {
-  $.getJSON('/search', function (b) {
-    this.blobs = b;
-    this.emit('update', this.blobs);
+  client.getJSON('/search', function (err, blobs) {
+    if (err) {
+      console.error(err);
+    } else {
+      this.blobs = blobs;
+      this.emit('update', this.blobs);
+    }
   }.bind(this));
 };
 
-BlobStore.prototype.filter = function (t) {
-  this.filterText = t;
+BlobStore.prototype.filter = function (text) {
+  this.filterText = text;
   this.emit('filtered', this.getFiltered());
 };
 

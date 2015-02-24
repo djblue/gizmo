@@ -192,7 +192,7 @@ body {
       .filename {
         font-weight: bold;
       }
-        
+
       .size {
         color: @red-light;
       }
@@ -321,7 +321,7 @@ body {
   }
 
   border-bottom: 1px solid @red-dark;
-  
+
 }
 
 .side-menu {
@@ -330,4 +330,74 @@ body {
   //height: 200px;
   background: @dark;
   position: absolute;
+}
+
+.login {
+  display: flex;
+  position: fixed;
+  top: 42px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: @red;
+  input {
+    margin: 10px;
+  }
+  button {
+    margin: 10px;
+    display: block;
+    width: 100%;
+    line-height: 32px;
+    background: @red-dark;
+    border: 1px solid @red-light;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+  }
+  .center {
+    margin: auto;
+  }
+}
+
+
+.notifications {
+
+  color: #555;
+  z-index: 10000;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+  min-width: 200px;
+  max-width: 100%;
+
+  .notify (@color) {
+    background: white;
+    padding: 5px 10px;
+    border-left: 5px solid @color;
+    margin-top: 3px;
+    overflow: hidden;
+    padding-right: 50px;
+    position: relative;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    line-height: 34px;
+    width: 34px;
+    text-align: center;
+    background: @red-dark;
+    color: white;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: @red-light;
+  }
+
+  .notify-err { .notify(@red-dark); }
+  .notify-log { .notify(@blue); }
 }
