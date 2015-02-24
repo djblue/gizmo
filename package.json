@@ -15,7 +15,7 @@
     "body-parser": "^1.11.0",
     "colors": "^1.0.3",
     "compression": "^1.4.1",
-    "content-addressable-store": "git://github.com/djblue/content-addressable-store.git#master",
+    "content-addressable-store": "git+http://github.com/djblue/content-addressable-store.git#master",
     "cors": "^2.5.3",
     "express": "^4.11.1",
     "jsonfile": "^2.0.0",
@@ -30,7 +30,7 @@
     "progress": "^1.1.8",
     "prompt": "^0.2.14",
     "qrcode-terminal": "^0.9.5",
-    "tabtab": "git://github.com/djblue/node-tabtab.git#master",
+    "tabtab": "git+http://github.com/djblue/node-tabtab.git#master",
     "text-table": "^0.2.0",
     "unrar": "^0.1.2",
     "valid-url": "^1.0.9"
