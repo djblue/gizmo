@@ -1,10 +1,8 @@
 var local = require('./local');
-var util = require('./httputil');
-
-var token = local.get('token');
-var url = require('url');
-
 var http = require('./httputil');
+
+var url = require('url');
+var auth = require('./auth');
 
 var methods = [
   'get',
@@ -14,32 +12,46 @@ var methods = [
 ];
 
 exports.createUrl = function (path) {
-  return local.get('url') + path + '?auth=' + token;
+  return local.get('url') + path + '?auth=' + local.get('token');
 };
 
 methods.forEach(function (method) {
-  exports[method + 'JSON'] = function (path, body, done) {
+  exports[method + 'JSON'] = function () {
 
-    var options = url.parse(local.get('url') || window.location.origin);
+    var args = arguments;
 
-    options.path = path;
-    options.method = method;
-    options.withCredentials = false; // allows cors
-
-    if (token !== null) {
-      options.headers = {
-        authorization: 'Bearer ' + token
-      };
+    if (local.get('token') === null) {
+      // if no token redirect to login page
+      window.location.hash = '#/login';
+      auth.on('login', function () {
+        makeRequest.apply(null, args);
+      });
+    } else {
+      makeRequest.apply(null, args);
     }
 
-    if (typeof body === 'function') {
-      util.request(options, http.bufferBodyJSON(body)).end();
-    } else {
-      var body = JSON.stringify(body);
-      opts.headers['Content-Length'] = body.length;
-      var req = util.request(options, util.bufferBodyJSON(done));
-      req.write(body);
-      req.end();
+    function makeRequest (path, body, done) {
+
+      var options = url.parse(local.get('url'));
+
+      options.path = path;
+      options.method = method;
+      options.withCredentials = false; // allows cors
+
+      options.headers = {
+        'Authorization': 'Bearer ' + local.get('token')
+      };
+
+      if (typeof body === 'function') {
+        http.request(options, http.bufferBodyJSON(body)).end();
+      } else {
+        var body = JSON.stringify(body);
+        options.headers['Content-Length'] = body.length;
+        options.headers['Content-Type'] = 'application/json';
+        var req = http.request(options, http.bufferBodyJSON(done));
+        req.write(body);
+        req.end();
+      }
     }
 
   };

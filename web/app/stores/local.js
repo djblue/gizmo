@@ -11,3 +11,7 @@ exports.set = function (key, value) {
   }
   localStorage.setItem(key, JSON.stringify(value));
 };
+
+exports.unset = function (key) {
+  localStorage.removeItem(key);
+};
