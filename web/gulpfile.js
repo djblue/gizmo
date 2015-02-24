@@ -23,7 +23,13 @@ function getNPMPackageIds () {
     // does not have a package.json manifest
   }
   return _.keys(packageManifest.dependencies)
-          .concat(['events', 'util']) || [];
+          .concat([
+            'events',
+            'util',
+            'http',
+            'https',
+            'url'
+          ]) || [];
 }
 
 gulp.task('vendor', function () {

@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var local = require('./local');
