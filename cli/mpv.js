@@ -1,15 +1,21 @@
 var log = require('../lib/log');
 
 var spawn = require('child_process').spawn;
-var fs = require('fs');
-var http = require('http');
+
+var lib = require('../lib');
+var client = lib.client;
 
 exports.description = "Play content from gizmo using mpv";
 
 exports.run = function (args) {
 
+  if (args._[1] === undefined) {
+    log.err('please enter <hash>');
+    process.exit(1);
+  }
+
   var mpv = spawn('mpv', [
-    'http://localhost:3000/blobs/' + args._[1]
+    client.createUrl('/blobs/' + args._[1])
   ], {
     stdio : 'inherit'
   });
@@ -26,30 +32,5 @@ exports.run = function (args) {
   mpv.on('close', function () {
     process.exit();
   });
-
-};
-
-exports.runOld = function () {
-
-  var temp = fs.createWriteStream('temp');
-
-  var options = {
-    hostname: 'localhost',
-    port: 3000,
-    path: '/' + process.argv[2],
-    method: 'GET'
-  };
-
-  var req = http.request(options, function(res) {
-
-    res.pipe(temp);
-
-    var mpv = spawn('mpv', ['--cache', '999999', 'temp'], {stdio : 'inherit'});
-
-    mpv.on('close', function () {
-      process.exit();
-    });
-
-  }).end();
 
 };
