@@ -4,8 +4,6 @@ var client = lib.client;
 
 var table = require('text-table');
 
-var fs = require('fs');
-var http = require('http');
 var util = require('util');
 var qs = require('querystring');
 
@@ -41,13 +39,6 @@ exports.run = function (args) {
 
   log.bug(parsedArgs);
 
-  var options = {
-    hostname: 'localhost',
-    port: 3000,
-    path: '/search?' + parsedArgs,
-    method: 'GET'
-  };
-
   client.getJSON('/search?' + parsedArgs, function (err, body) {
     if (err) {
       log.err(err);
@@ -55,32 +46,5 @@ exports.run = function (args) {
       console.log(util.inspect(body, { showHidden: true, depth: null, colors: true }));
     }
   });
-
-  log.bug(options);
-
-/*
-  var req = http.request(options, function (res) {
-    log.bug(res.statusCode);
-    var body = "";
-    res.on('data', function (data) {
-      body += data;
-    });
-    res.on('end', function () {
-      body = JSON.parse(body);
-      var out = body.map(function (item) {
-        return [
-          
-        ];
-      });
-      console.log(util.inspect(body, { showHidden: true, depth: null, colors: true }));
-    });
-  });
-
-  req.on('error', function (err) {
-    log.err(err);
-  });
-
-  req.end();
-  */
 
 };
