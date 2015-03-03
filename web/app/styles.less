@@ -150,9 +150,12 @@ body {
 .search-item-active
 {
 
+  .seach-item-row {
+    position: relative;
+    min-height: 64px;
+  }
+
   color: @dark;
-  position: relative;
-  min-height: 64px;
 
   &:nth-child(even) {
     background: #eee;
@@ -173,7 +176,22 @@ body {
     border-right: 1px solid @red-dark;
   }
 
+  .meta-editor {
+    textarea {
+      width: 100%;
+      display: block;
+      padding: 10px;
+      font-family: monospace;
+    }
+  }
+
+  .meta:hover {
+    border-right: 5px solid @red;
+  }
+
   .meta {
+
+    cursor: pointer;
     margin-left: 64px;
     left: 64px;
     top: 0;
